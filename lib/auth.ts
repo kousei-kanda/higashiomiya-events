@@ -8,11 +8,11 @@ import { cookies } from "next/headers";
 // ------------------------------------------------------------------
 
 export const SESSION_COOKIE_NAME = "admin_session";
-const SALT = "higashiomiya-shotenkai-admin"; // 固定ソルト（本番では環境変数化を推奨）
+const SALT = "higashiomiya-shokokai-admin"; // 固定ソルト（本番では環境変数化を推奨）
 
 function getAdminPassword(): string {
-  // .env.local に ADMIN_PASSWORD を設定してください（未設定時は開発用の初期値）
-  return process.env.ADMIN_PASSWORD || "toukyu2026";
+  console.log("ADMIN_PASSWORD =", process.env.ADMIN_PASSWORD);
+  return process.env.ADMIN_PASSWORD || "0000";
 }
 
 function getSessionToken(): string {
