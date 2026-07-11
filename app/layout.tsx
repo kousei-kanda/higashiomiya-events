@@ -72,7 +72,7 @@ export default function RootLayout({
               <Link href="/admin" className="hover:text-paper transition-colors">
                 商工会担当者の方はこちら
               </Link>
-              <span>© 東大宮商工会</span>
+              {/* <span>© 東大宮商工会</span> */}
             </div>
           </div>
         </footer>

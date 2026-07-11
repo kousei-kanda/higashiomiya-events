@@ -15,7 +15,7 @@ export default async function HomePage() {
             className="text-gold text-sm tracking-[0.3em] mb-4"
             style={{ fontFamily: "var(--font-ticket)" }}
           >
-            HIGASHIOMIYA SHOTENKAI
+            HIGASHIOMIYA SHOKOKAI
           </p>
           <h1 className="font-display font-black text-4xl sm:text-6xl leading-[1.2] text-paper max-w-3xl">
             商店街の灯りに、
