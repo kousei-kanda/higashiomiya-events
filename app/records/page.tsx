@@ -17,7 +17,7 @@ export default async function RecordsPage() {
         PAST PARTICIPATION
       </p>
       <h1 className="font-display font-bold text-3xl sm:text-4xl text-paper mb-3">
-        参加実績
+        参加実績（仮）
       </h1>
       <p className="text-paper-dim mb-10 max-w-2xl">
         過去に東大宮商工会のイベントへ参加した学生団体の一覧です。応募を検討する際の参考にしてください。
