@@ -1,30 +1,30 @@
 [
   {
     "id": "r1",
-    "event_name": "東大宮商工会 夏祭り 2025",
-    "event_year": 2025,
-    "group_name": "大道芸サークル PIERROT",
+    "event_name": "東大宮サマーフェスティバル 2026",
+    "event_year": 2026,
+    "group_name": "大道芸サークル(仮) ",
     "content": "ジャグリング・バルーンアート披露"
   },
   {
     "id": "r2",
-    "event_name": "東大宮商工会 夏祭り 2025",
-    "event_year": 2025,
+    "event_name": "東大宮イルミネーション点灯式",
+    "event_year": 2026,
     "group_name": "軽音楽サークル Sunburst",
-    "content": "夏祭りステージでの演奏"
+    "content": "イルミネーション点灯式での演奏"
   },
   {
     "id": "r3",
-    "event_name": "東大宮ストリートパフォーマンスDAY",
-    "event_year": 2025,
-    "group_name": "ダンスサークル RHYTHM",
-    "content": "ストリートダンスパフォーマンス"
+    "event_name": "キッチンカーうまいもん選手権",
+    "event_year": 2027,
+    "group_name": "ロボット交遊部からくり",
+    "content": "ロボットダンスパフォーマンス（仮）"
   },
   {
     "id": "r4",
-    "event_name": "東大宮秋のマルシェ 2025",
-    "event_year": 2025,
-    "group_name": "食品科学研究室",
+    "event_name": "キッチンカーうまいもん選手権",
+    "event_year": 2027,
+    "group_name": "食品爆食研究室（仮）",
     "content": "発酵食品の試食・研究紹介ブース"
   }
 ]
