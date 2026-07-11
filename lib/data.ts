@@ -5,23 +5,23 @@ import type {
   EventRecord,
   ApplicationRecord,
   ApplicationInput,
+  ApplicationStatus,
   ParticipationRecord,
   EventStatus,
 } from "./types";
+import { sql, ensureSchema } from "./db";
 
 // ------------------------------------------------------------------
-// これは「ローカルで動作確認するための仮のデータ層」です。
-// events.json / applications.json / records.json を読み書きしています。
+// イベント情報・参加実績はまだ data/*.json を読んでいるモック実装です
+// （将来ここもSupabase等に差し替え可能）。
 //
-// 本番でSupabaseに繋ぐ際は、この関数のシグネチャ（引数・戻り値の型）は
-// 変えずに、中身だけを Supabase クライアント呼び出しに置き換えれば
-// ページ側のコードは一切変更不要になるように設計しています。
-// 例: getEvents() → supabase.from("events").select("*")
+// 応募データ（applications）だけは Postgres (Neon) に保存しています。
+// Vercel はデプロイ後のファイルシステムが読み取り専用のため、
+// JSONファイルへの書き込みが本番で永続化されないことに対応しています。
 // ------------------------------------------------------------------
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const EVENTS_PATH = path.join(DATA_DIR, "events.json");
-const APPLICATIONS_PATH = path.join(DATA_DIR, "applications.json");
 const RECORDS_PATH = path.join(DATA_DIR, "records.json");
 
 async function readJson<T>(filePath: string): Promise<T> {
@@ -55,42 +55,58 @@ export async function getParticipationRecords(): Promise<ParticipationRecord[]> 
   return records.sort((a, b) => b.event_year - a.event_year);
 }
 
+type ApplicationRow = {
+  id: string;
+  event_id: string;
+  group_name: string;
+  representative_name: string;
+  email: string;
+  phone: string;
+  content: string;
+  group_intro: string;
+  pr_comment: string;
+  status: ApplicationStatus;
+  created_at: string | Date;
+};
+
+function rowToApplication(row: ApplicationRow): ApplicationRecord {
+  return {
+    ...row,
+    created_at:
+      row.created_at instanceof Date
+        ? row.created_at.toISOString()
+        : new Date(row.created_at).toISOString(),
+  };
+}
+
 export async function getApplications(): Promise<ApplicationRecord[]> {
-  const applications = await readJson<ApplicationRecord[]>(APPLICATIONS_PATH);
-  return applications.sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
+  await ensureSchema();
+  const rows = (await sql`
+    SELECT * FROM applications ORDER BY created_at DESC
+  `) as ApplicationRow[];
+  return rows.map(rowToApplication);
 }
 
 export async function createApplication(
   input: ApplicationInput
 ): Promise<ApplicationRecord> {
-  const applications = await readJson<ApplicationRecord[]>(APPLICATIONS_PATH);
+  await ensureSchema();
 
-  const newApplication: ApplicationRecord = {
-    id: `app_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    ...input,
-    status: "pending",
-    created_at: new Date().toISOString(),
-  };
+  const id = `app_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
-  applications.push(newApplication);
+  const rows = (await sql`
+    INSERT INTO applications (
+      id, event_id, group_name, representative_name, email, phone,
+      content, group_intro, pr_comment, status
+    ) VALUES (
+      ${id}, ${input.event_id}, ${input.group_name}, ${input.representative_name},
+      ${input.email}, ${input.phone}, ${input.content}, ${input.group_intro},
+      ${input.pr_comment}, 'pending'
+    )
+    RETURNING *
+  `) as ApplicationRow[];
 
-  try {
-    await fs.writeFile(
-      APPLICATIONS_PATH,
-      JSON.stringify(applications, null, 2),
-      "utf-8"
-    );
-  } catch {
-    // 注意: Vercel等のサーバーレス環境ではデプロイ後のファイルシステムは
-    // 読み取り専用のため、この書き込みは失敗します。
-    // 本番運用時はSupabaseのapplicationsテーブルへのinsertに置き換えてください。
-    console.warn(
-      "[mock-db] applications.json への書き込みに失敗しました。" +
-        "本番環境では Supabase 等の永続DBに置き換えてください。"
-    );
-  }
+  const newApplication = rowToApplication(rows[0]);
 
   // 学生への確認メール送信のモック（本番は Resend 等に置き換え）
   console.log(
