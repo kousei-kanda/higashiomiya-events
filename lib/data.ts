@@ -55,6 +55,13 @@ export async function getParticipationRecords(): Promise<ParticipationRecord[]> 
   return records.sort((a, b) => b.event_year - a.event_year);
 }
 
+export async function getApplications(): Promise<ApplicationRecord[]> {
+  const applications = await readJson<ApplicationRecord[]>(APPLICATIONS_PATH);
+  return applications.sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+}
+
 export async function createApplication(
   input: ApplicationInput
 ): Promise<ApplicationRecord> {

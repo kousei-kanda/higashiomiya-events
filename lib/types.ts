@@ -17,6 +17,12 @@ export interface EventRecord {
 // applications テーブル
 export type ApplicationStatus = "pending" | "accepted" | "rejected";
 
+export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
+  pending: "確認中",
+  accepted: "採用",
+  rejected: "不採用",
+};
+
 export interface ApplicationRecord {
   id: string;
   event_id: string;

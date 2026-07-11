@@ -68,7 +68,12 @@ export default function RootLayout({
         <footer className="border-t border-line mt-16">
           <div className="mx-auto max-w-5xl px-5 sm:px-8 py-8 text-xs text-paper-dim flex flex-col sm:flex-row gap-2 sm:justify-between">
             <span>東大宮商工会 イベント参加オファーシステム（開発中プロトタイプ）</span>
-            <span>© 東大宮商工会</span>
+            <div className="flex items-center gap-4">
+              <Link href="/admin" className="hover:text-paper transition-colors">
+                商工会担当者の方はこちら
+              </Link>
+              <span>© 東大宮商工会</span>
+            </div>
           </div>
         </footer>
       </body>
