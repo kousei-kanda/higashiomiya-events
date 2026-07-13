@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation";
-import { isAdminAuthenticated } from "@/lib/auth";
+import { requireAdminPage } from "@/lib/auth";
 import { getApplications, getEvents } from "@/lib/data";
 import { APPLICATION_STATUS_LABEL } from "@/lib/types";
-import LogoutButton from "@/components/LogoutButton";
+import AdminNav from "@/components/AdminNav";
+
+export const dynamic = "force-dynamic";
 
 const STATUS_BADGE_CLASS: Record<string, string> = {
   pending: "border-gold text-gold",
@@ -11,32 +12,30 @@ const STATUS_BADGE_CLASS: Record<string, string> = {
 };
 
 export default async function AdminPage() {
-  const authed = await isAdminAuthenticated();
-  if (!authed) {
-    redirect("/admin/login");
-  }
+  await requireAdminPage();
 
   const [applications, events] = await Promise.all([getApplications(), getEvents()]);
   const eventNameById = new Map(events.map((e) => [e.id, e.name]));
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 sm:py-16">
-      <div className="flex items-start justify-between gap-4 mb-8">
-        <div>
-          <p
-            className="text-gold text-xs tracking-[0.3em] mb-3"
-            style={{ fontFamily: "var(--font-ticket)" }}
-          >
-            ADMIN DASHBOARD
-          </p>
-          <h1 className="font-display font-bold text-3xl sm:text-4xl text-paper">
-            応募一覧
-          </h1>
-          <p className="text-paper-dim mt-2 text-sm">
-            全{applications.length}件の応募があります。
-          </p>
-        </div>
-        <LogoutButton />
+      <p
+        className="text-gold text-xs tracking-[0.3em] mb-3"
+        style={{ fontFamily: "var(--font-ticket)" }}
+      >
+        ADMIN DASHBOARD
+      </p>
+      <h1 className="font-display font-bold text-3xl sm:text-4xl text-paper mb-8">
+        管理者ページ
+      </h1>
+
+      <AdminNav />
+
+      <div className="mb-6">
+        <h2 className="font-display font-bold text-xl text-paper">応募一覧</h2>
+        <p className="text-paper-dim mt-1 text-sm">
+          全{applications.length}件の応募があります。
+        </p>
       </div>
 
       {applications.length === 0 ? (
@@ -97,7 +96,10 @@ export default async function AdminPage() {
                 className="mt-4 text-xs text-paper-dim"
                 style={{ fontFamily: "var(--font-ticket)" }}
               >
-                応募日時：{new Date(app.created_at).toLocaleString("ja-JP")}
+                応募日時：
+                {new Date(app.created_at).toLocaleString("ja-JP", {
+                  timeZone: "Asia/Tokyo",
+                })}
               </p>
             </div>
           ))}

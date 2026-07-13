@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "イベント一覧 | 東大宮商工会 × 学生団体",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function EventsPage() {
   const events = await getEvents();
 

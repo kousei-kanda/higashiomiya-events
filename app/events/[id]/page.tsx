@@ -1,14 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getEventById, getEventStatus, getEvents } from "@/lib/data";
+import { getEventById, getEventStatus } from "@/lib/data";
 import { formatEventDate, formatDeadline } from "@/lib/format";
 import StatusStamp from "@/components/StatusStamp";
 import ApplicationForm from "@/components/ApplicationForm";
 
-export async function generateStaticParams() {
-  const events = await getEvents();
-  return events.map((e) => ({ id: e.id }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function EventDetailPage({
   params,

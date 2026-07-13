@@ -56,3 +56,21 @@ export interface ApplicationInput {
   group_intro: string;
   pr_comment: string;
 }
+
+export interface EventInput {
+  name: string;
+  event_date: string; // ISO文字列
+  venue: string;
+  recruit_content: string;
+  description: string;
+  deadline: string; // ISO文字列
+  capacity: number | null;
+  image_emoji: string;
+}
+
+export interface ParticipationRecordInput {
+  event_name: string;
+  event_year: number;
+  group_name: string;
+  content: string;
+}

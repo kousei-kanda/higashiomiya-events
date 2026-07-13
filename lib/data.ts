@@ -1,33 +1,21 @@
 import "server-only";
-import fs from "fs/promises";
-import path from "path";
 import type {
   EventRecord,
+  EventInput,
   ApplicationRecord,
   ApplicationInput,
   ApplicationStatus,
   ParticipationRecord,
+  ParticipationRecordInput,
   EventStatus,
 } from "./types";
-import { sql, ensureSchema } from "./db";
+import { sql, ensureReady } from "./db";
 
 // ------------------------------------------------------------------
-// イベント情報・参加実績はまだ data/*.json を読んでいるモック実装です
-// （将来ここもSupabase等に差し替え可能）。
-//
-// 応募データ（applications）だけは Postgres (Neon) に保存しています。
-// Vercel はデプロイ後のファイルシステムが読み取り専用のため、
-// JSONファイルへの書き込みが本番で永続化されないことに対応しています。
+// events / participation_records / applications はすべて Postgres (Neon) に
+// 保存しています。events・participation_records はテーブルが空のときだけ
+// data/events.json・data/records.json の内容で初期化されます（lib/db.ts）。
 // ------------------------------------------------------------------
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const EVENTS_PATH = path.join(DATA_DIR, "events.json");
-const RECORDS_PATH = path.join(DATA_DIR, "records.json");
-
-async function readJson<T>(filePath: string): Promise<T> {
-  const raw = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(raw) as T;
-}
 
 export function getEventStatus(event: EventRecord): EventStatus {
   const now = Date.now();
@@ -38,21 +26,152 @@ export function getEventStatus(event: EventRecord): EventStatus {
   return "open";
 }
 
+type EventRow = {
+  id: string;
+  name: string;
+  event_date: string | Date;
+  venue: string;
+  recruit_content: string;
+  description: string;
+  deadline: string | Date;
+  capacity: number | null;
+  image_emoji: string;
+};
+
+function toIso(value: string | Date): string {
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+}
+
+function rowToEvent(row: EventRow): EventRecord {
+  return {
+    id: row.id,
+    name: row.name,
+    event_date: toIso(row.event_date),
+    venue: row.venue,
+    recruit_content: row.recruit_content,
+    description: row.description,
+    deadline: toIso(row.deadline),
+    capacity: row.capacity,
+    image_emoji: row.image_emoji,
+  };
+}
+
 export async function getEvents(): Promise<EventRecord[]> {
-  const events = await readJson<EventRecord[]>(EVENTS_PATH);
-  return events.sort(
-    (a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime()
-  );
+  await ensureReady();
+  const rows = (await sql`
+    SELECT * FROM events ORDER BY event_date ASC
+  `) as EventRow[];
+  return rows.map(rowToEvent);
 }
 
 export async function getEventById(id: string): Promise<EventRecord | null> {
-  const events = await getEvents();
-  return events.find((e) => e.id === id) ?? null;
+  await ensureReady();
+  const rows = (await sql`
+    SELECT * FROM events WHERE id = ${id} LIMIT 1
+  `) as EventRow[];
+  return rows[0] ? rowToEvent(rows[0]) : null;
+}
+
+export async function createEvent(input: EventInput): Promise<EventRecord> {
+  await ensureReady();
+  const id = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const rows = (await sql`
+    INSERT INTO events (id, name, event_date, venue, recruit_content, description, deadline, capacity, image_emoji)
+    VALUES (${id}, ${input.name}, ${input.event_date}, ${input.venue}, ${input.recruit_content}, ${input.description}, ${input.deadline}, ${input.capacity}, ${input.image_emoji})
+    RETURNING *
+  `) as EventRow[];
+  return rowToEvent(rows[0]);
+}
+
+export async function updateEvent(
+  id: string,
+  input: EventInput
+): Promise<EventRecord | null> {
+  await ensureReady();
+  const rows = (await sql`
+    UPDATE events SET
+      name = ${input.name},
+      event_date = ${input.event_date},
+      venue = ${input.venue},
+      recruit_content = ${input.recruit_content},
+      description = ${input.description},
+      deadline = ${input.deadline},
+      capacity = ${input.capacity},
+      image_emoji = ${input.image_emoji}
+    WHERE id = ${id}
+    RETURNING *
+  `) as EventRow[];
+  return rows[0] ? rowToEvent(rows[0]) : null;
+}
+
+export async function deleteEvent(id: string): Promise<void> {
+  await ensureReady();
+  await sql`DELETE FROM events WHERE id = ${id}`;
+}
+
+type ParticipationRow = {
+  id: string;
+  event_name: string;
+  event_year: number;
+  group_name: string;
+  content: string;
+};
+
+function rowToParticipation(row: ParticipationRow): ParticipationRecord {
+  return { ...row };
 }
 
 export async function getParticipationRecords(): Promise<ParticipationRecord[]> {
-  const records = await readJson<ParticipationRecord[]>(RECORDS_PATH);
-  return records.sort((a, b) => b.event_year - a.event_year);
+  await ensureReady();
+  const rows = (await sql`
+    SELECT * FROM participation_records ORDER BY event_year DESC
+  `) as ParticipationRow[];
+  return rows.map(rowToParticipation);
+}
+
+export async function getParticipationRecordById(
+  id: string
+): Promise<ParticipationRecord | null> {
+  await ensureReady();
+  const rows = (await sql`
+    SELECT * FROM participation_records WHERE id = ${id} LIMIT 1
+  `) as ParticipationRow[];
+  return rows[0] ? rowToParticipation(rows[0]) : null;
+}
+
+export async function createParticipationRecord(
+  input: ParticipationRecordInput
+): Promise<ParticipationRecord> {
+  await ensureReady();
+  const id = `rec_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const rows = (await sql`
+    INSERT INTO participation_records (id, event_name, event_year, group_name, content)
+    VALUES (${id}, ${input.event_name}, ${input.event_year}, ${input.group_name}, ${input.content})
+    RETURNING *
+  `) as ParticipationRow[];
+  return rowToParticipation(rows[0]);
+}
+
+export async function updateParticipationRecord(
+  id: string,
+  input: ParticipationRecordInput
+): Promise<ParticipationRecord | null> {
+  await ensureReady();
+  const rows = (await sql`
+    UPDATE participation_records SET
+      event_name = ${input.event_name},
+      event_year = ${input.event_year},
+      group_name = ${input.group_name},
+      content = ${input.content}
+    WHERE id = ${id}
+    RETURNING *
+  `) as ParticipationRow[];
+  return rows[0] ? rowToParticipation(rows[0]) : null;
+}
+
+export async function deleteParticipationRecord(id: string): Promise<void> {
+  await ensureReady();
+  await sql`DELETE FROM participation_records WHERE id = ${id}`;
 }
 
 type ApplicationRow = {
@@ -72,15 +191,12 @@ type ApplicationRow = {
 function rowToApplication(row: ApplicationRow): ApplicationRecord {
   return {
     ...row,
-    created_at:
-      row.created_at instanceof Date
-        ? row.created_at.toISOString()
-        : new Date(row.created_at).toISOString(),
+    created_at: toIso(row.created_at),
   };
 }
 
 export async function getApplications(): Promise<ApplicationRecord[]> {
-  await ensureSchema();
+  await ensureReady();
   const rows = (await sql`
     SELECT * FROM applications ORDER BY created_at DESC
   `) as ApplicationRow[];
@@ -90,7 +206,7 @@ export async function getApplications(): Promise<ApplicationRecord[]> {
 export async function createApplication(
   input: ApplicationInput
 ): Promise<ApplicationRecord> {
-  await ensureSchema();
+  await ensureReady();
 
   const id = `app_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 

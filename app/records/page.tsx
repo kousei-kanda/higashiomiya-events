@@ -5,6 +5,8 @@ export const metadata: Metadata = {
   title: "参加実績 | 東大宮商工会 × 学生団体",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function RecordsPage() {
   const records = await getParticipationRecords();
 

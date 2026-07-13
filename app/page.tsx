@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getEvents } from "@/lib/data";
 import EventTicketCard from "@/components/EventTicketCard";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const events = await getEvents();
   const upcoming = events.slice(0, 2);
