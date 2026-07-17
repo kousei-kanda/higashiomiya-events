@@ -48,7 +48,13 @@ export default function RootLayout({
                 東大宮商工会 × 学生団体
               </span>
             </Link>
-            <nav className="flex items-center gap-6 text-sm">
+            <nav className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm flex-wrap justify-end">
+              <Link
+                href="/"
+                className="text-paper-dim hover:text-paper transition-colors"
+              >
+                ホーム
+              </Link>
               <Link
                 href="/events"
                 className="text-paper-dim hover:text-paper transition-colors"
@@ -60,6 +66,12 @@ export default function RootLayout({
                 className="text-paper-dim hover:text-paper transition-colors"
               >
                 参加実績
+              </Link>
+              <Link
+                href="/gacha"
+                className="text-paper-dim hover:text-paper transition-colors"
+              >
+                ガチャ
               </Link>
             </nav>
           </div>
