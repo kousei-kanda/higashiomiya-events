@@ -25,7 +25,7 @@ export default async function HomePage() {
             <span className="text-lantern-2">学生の出番</span>を灯す。
           </h1>
           <p className="mt-6 text-paper-dim max-w-xl leading-relaxed">
-            東大宮商工会が開催する夏祭りや月例イベントに、大学のサークル・ゼミが出店・出演できます。
+            東大宮商工会が開催する夏祭りなどのイベントに、大学のサークル・ゼミが出店・出演できます。
             知られていなかった地域のイベントと、発表の場を探す学生団体を、このサイトがつなぎます。
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
