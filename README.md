@@ -1,5 +1,6 @@
 # 東大宮商工会 × 学生団体 イベント参加オファーシステム
-
+URL:
+https://higashiomiya-events.vercel.app
 要件定義書の「3.1 学生向け機能」（イベント一覧閲覧・イベント応募・参加実績閲覧）と、
 「3.2 商工会向け機能」のうちイベント管理・応募確認を実装したプロトタイプです。
 
@@ -23,15 +24,9 @@
 
 ## データベース (Postgres / Neon) のセットアップ
 
-Vercelプロジェクトに Neon の Postgres データベースを接続する必要があります。
-（旧「Vercel Postgres」はNeonに統合されたため、現在はMarketplace経由でNeonを追加する形になっています）
+Vercelプロジェクトに Neon の Postgres データベースを接続済み
 
-1. Vercelのプロジェクトダッシュボード → **Storage** タブ → **Create Database**
-2. **Neon** を選択し、リージョンとプラン（Freeでも可）を選んで作成
-3. 作成後、**Connect Project** で対象のVercelプロジェクトを選び、Production / Preview / Development すべてにチェックして接続
-   → `DATABASE_URL` などの環境変数が自動でVercel側に追加されます
-4. 環境変数が追加されたら、Deployments → 最新デプロイの「Redeploy」で **再デプロイ** して反映させる
-5. ローカルでも動作確認したい場合は、同じ接続文字列を `.env.local` の `DATABASE_URL` にコピー
+ ローカルでも動作確認したい場合は、同じ接続文字列を `.env.local` の `DATABASE_URL` にコピー
 
 `events` / `participation_records` / `applications` の各テーブルはアプリが初回アクセス時に自動作成します。
 `events` と `participation_records` は、テーブルが空の場合に限り `data/events.json` / `data/records.json`
@@ -51,7 +46,7 @@ npm run dev
 `http://localhost:3000` で確認できます。
 
 > 管理者ページの認証はプロトタイプ用の簡易パスワード認証です。本番運用前に Supabase Auth 等の
-> 正式な認証基盤に置き換えることを推奨します。
+> 正式な認証基盤に置き換えることを予定します
 
 ## ディレクトリ構成（要点）
 
