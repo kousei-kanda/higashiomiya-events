@@ -12,7 +12,7 @@ export const SESSION_COOKIE_NAME = "admin_session";
 const SALT = "higashiomiya-shokokai-admin"; // 固定ソルト（本番では環境変数化を推奨）
 
 function getAdminPassword(): string {
-  return process.env.ADMIN_PASSWORD || "0000";
+  return process.env.ADMIN_PASSWORD || "0123";
 }
 
 function getSessionToken(): string {
