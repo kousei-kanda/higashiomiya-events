@@ -37,39 +37,36 @@ export default function RootLayout({
       lang="ja"
       className={`${notoSerifJP.variable} ${zenKaku.variable} ${dotGothic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-night text-paper">
-        <header className="border-b border-line">
+      <body className="min-h-full flex flex-col bg-bg text-text">
+        <header className="bg-surface border-b border-line">
           <div className="mx-auto max-w-5xl px-5 sm:px-8 py-5 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <span className="text-2xl" aria-hidden>
-                🏮
-              </span>
-              <span className="font-display font-bold text-lg tracking-wide text-paper group-hover:text-lantern-2 transition-colors">
-                東大宮商工会 × 学生団体
+            <Link href="/" className="flex items-center gap-2.5">
+              <span className="font-display font-bold text-lg tracking-wide text-text">
+                東大宮商工会
               </span>
             </Link>
             <nav className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm flex-wrap justify-end">
               <Link
                 href="/"
-                className="text-paper-dim hover:text-paper transition-colors"
+                className="text-text hover:text-green transition-colors"
               >
                 ホーム
               </Link>
               <Link
                 href="/events"
-                className="text-paper-dim hover:text-paper transition-colors"
+                className="text-text hover:text-green transition-colors"
               >
                 イベント一覧
               </Link>
               <Link
                 href="/records"
-                className="text-paper-dim hover:text-paper transition-colors"
+                className="text-text hover:text-green transition-colors"
               >
                 参加実績
               </Link>
               <Link
                 href="/gacha"
-                className="text-paper-dim hover:text-paper transition-colors"
+                className="text-text hover:text-green transition-colors"
               >
                 ガチャ
               </Link>
@@ -77,15 +74,10 @@ export default function RootLayout({
           </div>
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-line mt-16">
-          <div className="mx-auto max-w-5xl px-5 sm:px-8 py-8 text-xs text-paper-dim flex flex-col sm:flex-row gap-2 sm:justify-between">
-            <span>東大宮商工会 イベント参加オファーシステム（開発中プロトタイプ）</span>
-            <div className="flex items-center gap-4">
-              <Link href="/admin" className="hover:text-paper transition-colors">
-                商工会担当者の方はこちら
-              </Link>
-              {/* <span>© 東大宮商工会</span> */}
-            </div>
+        <footer className="bg-surface border-t border-line mt-16">
+          <div className="mx-auto max-w-5xl px-5 sm:px-8 py-8 text-xs text-text-dim flex flex-col sm:flex-row gap-2 sm:justify-between">
+            <span>プライバシーポリシー</span>
+            <span>商工会の方はこちら</span>
           </div>
         </footer>
       </body>

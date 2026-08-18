@@ -1,33 +1,28 @@
 @import "tailwindcss";
 
 /*
-  デザインコンセプト: 「夜の縁日」
-  東大宮の商店街の夏祭り・縁日の提灯の灯りをイメージした、
-  紺色の夜空に朱色と金色の灯りが浮かぶ配色。
-  イベントカードは縁日の出店券（チケット半券）をモチーフにしている。
+  デザインコンセプト（リニューアル）:
+  白に近い薄灰色の背景と黒文字を基調に、見出しは緑のボックス＋白文字で強調する
+  シンプルで見やすい配色。
 */
 
 :root {
-  --color-night: #0f1c34;         /* 夜空・背景 */
-  --color-night-2: #182a4b;       /* カード面 */
-  --color-night-3: #21365e;       /* ホバー・境界の明るい面 */
-  --color-paper: #f6eede;         /* 和紙のような白 */
-  --color-paper-dim: #b8c2d9;     /* 抑えたテキスト */
-  --color-lantern: #e8552b;       /* 提灯の朱色 */
-  --color-lantern-2: #ff7a49;     /* 明るい朱色（ホバー） */
-  --color-gold: #e4b559;          /* 金色アクセント */
-  --color-line: rgba(246, 238, 222, 0.14);
+  --color-bg: #f2f2f0;          /* 白が強い灰色背景 */
+  --color-surface: #ffffff;     /* カード・パネル面 */
+  --color-text: #111111;        /* 本文の黒 */
+  --color-text-dim: #555555;    /* 抑えたテキスト */
+  --color-green: #1f7a3d;       /* 見出しboxの緑 */
+  --color-green-dark: #175c2d;  /* 緑のホバー・濃色 */
+  --color-line: #d9d9d6;        /* 区切り線の灰色 */
 }
 
 @theme inline {
-  --color-night: var(--color-night);
-  --color-night-2: var(--color-night-2);
-  --color-night-3: var(--color-night-3);
-  --color-paper: var(--color-paper);
-  --color-paper-dim: var(--color-paper-dim);
-  --color-lantern: var(--color-lantern);
-  --color-lantern-2: var(--color-lantern-2);
-  --color-gold: var(--color-gold);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-text: var(--color-text);
+  --color-text-dim: var(--color-text-dim);
+  --color-green: var(--color-green);
+  --color-green-dark: var(--color-green-dark);
   --color-line: var(--color-line);
 
   --font-display: var(--font-noto-serif-jp);
@@ -40,55 +35,14 @@ html {
 }
 
 body {
-  background: var(--color-night);
-  color: var(--color-paper);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body), sans-serif;
 }
 
 ::selection {
-  background: var(--color-lantern);
-  color: var(--color-night);
-}
-
-/* 出店券（チケット半券）の切り取り線 */
-.ticket-perforation {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--color-line) 0,
-    var(--color-line) 6px,
-    transparent 6px,
-    transparent 14px
-  );
-}
-
-.ticket-notch {
-  position: relative;
-}
-
-.ticket-notch::before,
-.ticket-notch::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: var(--color-night);
-  border-radius: 9999px;
-  left: -10px;
-}
-
-.ticket-notch::before {
-  top: -10px;
-}
-
-.ticket-notch::after {
-  bottom: -10px;
-}
-
-@media (max-width: 640px) {
-  .ticket-notch::before,
-  .ticket-notch::after {
-    display: none;
-  }
+  background: var(--color-green);
+  color: #ffffff;
 }
 
 a:focus-visible,
@@ -96,7 +50,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-green);
   outline-offset: 2px;
 }
 
