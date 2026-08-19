@@ -15,7 +15,7 @@ export default async function HomePage() {
       <section className="mx-auto max-w-5xl px-5 sm:px-8 pt-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/canble_poster.jpg"
+          src="/images/candle_top.jpg"
           alt="出演者・展示物募集中！"
           className="w-full h-auto rounded-lg bg-line"
         />
