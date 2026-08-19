@@ -10,12 +10,19 @@ import type {
   EventStatus,
 } from "./types";
 import { sql, ensureReady } from "./db";
+import * as localStore from "./localStore";
 
 // ------------------------------------------------------------------
 // events / participation_records / applications はすべて Postgres (Neon) に
 // 保存しています。events・participation_records はテーブルが空のときだけ
 // data/events.json・data/records.json の内容で初期化されます（lib/db.ts）。
+//
+// DATABASE_URL が未設定のローカル開発では、代わりに lib/localStore.ts の
+// メモリ上のストア（data/events.json・data/records.json を初期値として使用）に
+// フォールバックします。
 // ------------------------------------------------------------------
+
+const DB_ENABLED = !!process.env.DATABASE_URL;
 
 export function getEventStatus(event: EventRecord): EventStatus {
   const now = Date.now();
@@ -57,6 +64,7 @@ function rowToEvent(row: EventRow): EventRecord {
 }
 
 export async function getEvents(): Promise<EventRecord[]> {
+  if (!DB_ENABLED) return localStore.getEvents();
   await ensureReady();
   const rows = (await sql`
     SELECT * FROM events ORDER BY event_date ASC
@@ -65,6 +73,7 @@ export async function getEvents(): Promise<EventRecord[]> {
 }
 
 export async function getEventById(id: string): Promise<EventRecord | null> {
+  if (!DB_ENABLED) return localStore.getEventById(id);
   await ensureReady();
   const rows = (await sql`
     SELECT * FROM events WHERE id = ${id} LIMIT 1
@@ -73,6 +82,7 @@ export async function getEventById(id: string): Promise<EventRecord | null> {
 }
 
 export async function createEvent(input: EventInput): Promise<EventRecord> {
+  if (!DB_ENABLED) return localStore.createEvent(input);
   await ensureReady();
   const id = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const rows = (await sql`
@@ -87,6 +97,7 @@ export async function updateEvent(
   id: string,
   input: EventInput
 ): Promise<EventRecord | null> {
+  if (!DB_ENABLED) return localStore.updateEvent(id, input);
   await ensureReady();
   const rows = (await sql`
     UPDATE events SET
@@ -105,6 +116,7 @@ export async function updateEvent(
 }
 
 export async function deleteEvent(id: string): Promise<void> {
+  if (!DB_ENABLED) return localStore.deleteEvent(id);
   await ensureReady();
   await sql`DELETE FROM events WHERE id = ${id}`;
 }
@@ -122,6 +134,7 @@ function rowToParticipation(row: ParticipationRow): ParticipationRecord {
 }
 
 export async function getParticipationRecords(): Promise<ParticipationRecord[]> {
+  if (!DB_ENABLED) return localStore.getParticipationRecords();
   await ensureReady();
   const rows = (await sql`
     SELECT * FROM participation_records ORDER BY event_year DESC
@@ -132,6 +145,7 @@ export async function getParticipationRecords(): Promise<ParticipationRecord[]> 
 export async function getParticipationRecordById(
   id: string
 ): Promise<ParticipationRecord | null> {
+  if (!DB_ENABLED) return localStore.getParticipationRecordById(id);
   await ensureReady();
   const rows = (await sql`
     SELECT * FROM participation_records WHERE id = ${id} LIMIT 1
@@ -142,6 +156,7 @@ export async function getParticipationRecordById(
 export async function createParticipationRecord(
   input: ParticipationRecordInput
 ): Promise<ParticipationRecord> {
+  if (!DB_ENABLED) return localStore.createParticipationRecord(input);
   await ensureReady();
   const id = `rec_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const rows = (await sql`
@@ -156,6 +171,7 @@ export async function updateParticipationRecord(
   id: string,
   input: ParticipationRecordInput
 ): Promise<ParticipationRecord | null> {
+  if (!DB_ENABLED) return localStore.updateParticipationRecord(id, input);
   await ensureReady();
   const rows = (await sql`
     UPDATE participation_records SET
@@ -170,6 +186,7 @@ export async function updateParticipationRecord(
 }
 
 export async function deleteParticipationRecord(id: string): Promise<void> {
+  if (!DB_ENABLED) return localStore.deleteParticipationRecord(id);
   await ensureReady();
   await sql`DELETE FROM participation_records WHERE id = ${id}`;
 }
@@ -196,6 +213,7 @@ function rowToApplication(row: ApplicationRow): ApplicationRecord {
 }
 
 export async function getApplications(): Promise<ApplicationRecord[]> {
+  if (!DB_ENABLED) return localStore.getApplications();
   await ensureReady();
   const rows = (await sql`
     SELECT * FROM applications ORDER BY created_at DESC
@@ -206,23 +224,29 @@ export async function getApplications(): Promise<ApplicationRecord[]> {
 export async function createApplication(
   input: ApplicationInput
 ): Promise<ApplicationRecord> {
-  await ensureReady();
+  let newApplication: ApplicationRecord;
 
-  const id = `app_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  if (!DB_ENABLED) {
+    newApplication = await localStore.createApplication(input);
+  } else {
+    await ensureReady();
 
-  const rows = (await sql`
-    INSERT INTO applications (
-      id, event_id, group_name, representative_name, email, phone,
-      content, group_intro, pr_comment, status
-    ) VALUES (
-      ${id}, ${input.event_id}, ${input.group_name}, ${input.representative_name},
-      ${input.email}, ${input.phone}, ${input.content}, ${input.group_intro},
-      ${input.pr_comment}, 'pending'
-    )
-    RETURNING *
-  `) as ApplicationRow[];
+    const id = `app_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
-  const newApplication = rowToApplication(rows[0]);
+    const rows = (await sql`
+      INSERT INTO applications (
+        id, event_id, group_name, representative_name, email, phone,
+        content, group_intro, pr_comment, status
+      ) VALUES (
+        ${id}, ${input.event_id}, ${input.group_name}, ${input.representative_name},
+        ${input.email}, ${input.phone}, ${input.content}, ${input.group_intro},
+        ${input.pr_comment}, 'pending'
+      )
+      RETURNING *
+    `) as ApplicationRow[];
+
+    newApplication = rowToApplication(rows[0]);
+  }
 
   // 学生への確認メール送信のモック（本番は Resend 等に置き換え）
   console.log(
