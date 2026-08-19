@@ -76,7 +76,9 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <footer className="bg-surface border-t border-line mt-16">
           <div className="mx-auto max-w-5xl px-5 sm:px-8 py-8 text-xs text-text-dim flex flex-col sm:flex-row gap-2 sm:justify-between">
-            <span>プライバシーポリシー</span>
+            <Link href="/privacy-policy" className="hover:text-green transition-colors">
+              プライバシーポリシー
+            </Link>
             <span>商工会の方はこちら</span>
           </div>
         </footer>
