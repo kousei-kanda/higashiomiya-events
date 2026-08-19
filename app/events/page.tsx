@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { getEvents } from "@/lib/data";
-import EventTicketCard from "@/components/EventTicketCard";
+import { getEvents, getEventStatus } from "@/lib/data";
+import { formatDeadline, formatEventDate } from "@/lib/format";
+import { getEventImageSrc } from "@/lib/eventImages";
+import EventPromoRow from "@/components/EventPromoRow";
 
 export const metadata: Metadata = {
   title: "イベント一覧 | 東大宮商工会 × 学生団体",
@@ -10,33 +12,60 @@ export const dynamic = "force-dynamic";
 
 export default async function EventsPage() {
   const events = await getEvents();
+  const recruiting = events.filter((event) => getEventStatus(event) !== "closed");
+  const past = events.filter((event) => getEventStatus(event) === "closed");
 
   return (
     <div className="mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
-      <p
-        className="text-gold text-xs tracking-[0.3em] mb-3"
-        style={{ fontFamily: "var(--font-ticket)" }}
-      >
-        EVENT LIST
-      </p>
-      <h1 className="font-display font-bold text-3xl sm:text-4xl text-paper mb-3">
-        イベント一覧
-      </h1>
-      <p className="text-paper-dim mb-10 max-w-2xl">
-        東大宮商工会が募集しているイベントです。気になるイベントの券をめくって詳細を確認し、そのまま出店・出演の応募ができます。
-      </p>
+      <section>
+        <h2 className="bg-green text-white font-display font-bold text-lg sm:text-xl px-5 py-3 rounded-md">
+          募集中のイベント一覧
+        </h2>
+        {recruiting.length === 0 ? (
+          <p className="mt-5 text-sm text-text-dim">
+            現在募集中のイベントはありません。しばらくしてから再度ご確認ください。
+          </p>
+        ) : (
+          <div className="divide-y divide-line">
+            {recruiting.map((event) => (
+              <EventPromoRow
+                key={event.id}
+                imageSrc={getEventImageSrc(event.id)}
+                imageEmoji={event.image_emoji}
+                imageAlt={event.name}
+                title={event.name}
+                eventDateText={formatEventDate(event.event_date)}
+                deadlineText={formatDeadline(event.deadline)}
+                description={event.description}
+              />
+            ))}
+          </div>
+        )}
+      </section>
 
-      {events.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-night-2 p-10 text-center text-paper-dim">
-          現在募集中のイベントはありません。しばらくしてから再度ご確認ください。
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {events.map((event) => (
-            <EventTicketCard key={event.id} event={event} />
-          ))}
-        </div>
-      )}
+      <section className="mt-12">
+        <h2 className="bg-green text-white font-display font-bold text-lg sm:text-xl px-5 py-3 rounded-md">
+          過去のイベント一覧
+        </h2>
+        {past.length === 0 ? (
+          <p className="mt-5 text-sm text-text-dim">過去のイベントはまだありません。</p>
+        ) : (
+          <div className="divide-y divide-line">
+            {past.map((event) => (
+              <EventPromoRow
+                key={event.id}
+                imageSrc={getEventImageSrc(event.id)}
+                imageEmoji={event.image_emoji}
+                imageAlt={event.name}
+                title={event.name}
+                eventDateText={formatEventDate(event.event_date)}
+                deadlineText={formatDeadline(event.deadline)}
+                description={event.description}
+              />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

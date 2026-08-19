@@ -9,32 +9,50 @@ function truncateDescription(text: string): string {
 
 export default function EventPromoRow({
   imageSrc,
+  imageEmoji,
   imageAlt,
   title,
+  eventDateText,
   deadlineText,
   description,
 }: {
-  imageSrc: string;
+  imageSrc?: string;
+  imageEmoji: string;
   imageAlt: string;
   title: string;
+  eventDateText: string;
   deadlineText: string;
   description: string;
 }) {
   return (
     <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 py-8">
       <div className="sm:w-[30%] shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          className="w-full h-48 sm:h-full object-cover rounded-lg bg-line"
-        />
+        {imageSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            className="w-full h-48 sm:h-full object-cover rounded-lg bg-line"
+          />
+        ) : (
+          <div
+            className="w-full h-48 sm:h-full rounded-lg bg-line flex items-center justify-center text-5xl"
+            aria-hidden
+          >
+            {imageEmoji}
+          </div>
+        )}
       </div>
       <div className="sm:w-[70%] flex flex-col">
         <h3 className="font-display font-bold text-lg sm:text-xl text-text">
           {title}
         </h3>
-        <p className="mt-2 text-sm text-text-dim">締切　{deadlineText}</p>
+        <p className="mt-2 text-sm text-text-dim">開催日　{eventDateText}</p>
+        <p className="mt-1 text-sm">
+          <span className="inline-block bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded">
+            締切　{deadlineText}
+          </span>
+        </p>
         <p className="mt-3 text-sm text-text leading-relaxed">
           {truncateDescription(description)}
         </p>
@@ -43,7 +61,7 @@ export default function EventPromoRow({
             type="button"
             className="rounded-full bg-green px-6 py-2 text-sm font-bold text-white"
           >
-            詳細
+            応募に進む
           </button>
         </div>
       </div>

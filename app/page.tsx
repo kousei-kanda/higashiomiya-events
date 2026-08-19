@@ -1,5 +1,6 @@
 import { getEvents } from "@/lib/data";
-import { formatDeadline } from "@/lib/format";
+import { formatDeadline, formatEventDate } from "@/lib/format";
+import { getEventImageSrc } from "@/lib/eventImages";
 import EventPromoRow from "@/components/EventPromoRow";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +37,14 @@ export default async function HomePage() {
           募集中のイベント一覧
         </h2>
         <div className="divide-y divide-line">
-          {upcoming.map((event, index) => (
+          {upcoming.map((event) => (
             <EventPromoRow
               key={event.id}
-              imageSrc={index === 0 ? "/images/sf_2026.jpg" : "/images/illumi_2026.jpg"}
+              imageSrc={getEventImageSrc(event.id)}
+              imageEmoji={event.image_emoji}
               imageAlt={event.name}
               title={event.name}
+              eventDateText={formatEventDate(event.event_date)}
               deadlineText={formatDeadline(event.deadline)}
               description={event.description}
             />
