@@ -22,7 +22,7 @@ export default function GachaPage() {
           新しいタブで開く ↗
         </a>
       </div>
-      <p className="mt-5 text-sm sm:text-base text-text leading-relaxed">
+      <p className="mt-5 text-base sm:text-lg text-text leading-relaxed">
         今日どこで食べるか迷ったら、ガチャを回して東大宮のお店を決めよう！
       </p>
 

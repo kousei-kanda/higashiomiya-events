@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const events = await getEvents();
-  const upcoming = events.slice(0, 2);
+  const upcoming = events.filter((event) => getEventStatus(event) !== "closed");
 
   return (
     <div>
@@ -26,7 +26,7 @@ export default async function HomePage() {
         <h2 className="bg-green text-white font-display font-bold text-lg sm:text-xl px-5 py-3 rounded-md">
           出演者・展示物募集中！
         </h2>
-        <p className="mt-5 text-sm sm:text-base text-text leading-relaxed">
+        <p className="mt-5 text-base sm:text-lg text-text leading-relaxed">
           東大宮商工会が開催する夏祭りなどのイベントに応募しませんか。「パフォーマンス」から「展示」まで幅広くOK！サークル、部活、研究室など問わず興味がある方は気軽に応募してください！
         </p>
       </section>
@@ -42,7 +42,6 @@ export default async function HomePage() {
               key={event.id}
               eventId={event.id}
               imageSrc={getEventImageSrc(event.id)}
-              imageEmoji={event.image_emoji}
               imageAlt={event.name}
               title={event.name}
               eventDateText={formatEventDate(event.event_date)}

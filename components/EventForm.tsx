@@ -31,7 +31,6 @@ export default function EventForm({ event }: { event?: EventRecord }) {
       description: String(data.get("description") || ""),
       deadline: jstLocalInputToIso(String(data.get("deadline") || "")),
       capacity: capacityRaw === "" ? null : Number(capacityRaw),
-      image_emoji: String(data.get("image_emoji") || "🏮"),
     };
 
     try {
@@ -143,34 +142,19 @@ export default function EventForm({ event }: { event?: EventRecord }) {
         />
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-5">
-        <div>
-          <label htmlFor="capacity" className={LABEL_CLASS}>
-            募集人数（枠）
-          </label>
-          <input
-            id="capacity"
-            name="capacity"
-            type="number"
-            min={0}
-            defaultValue={event?.capacity ?? undefined}
-            placeholder="例：15"
-            className={FIELD_CLASS}
-          />
-        </div>
-        <div>
-          <label htmlFor="image_emoji" className={LABEL_CLASS}>
-            アイコン（絵文字）
-          </label>
-          <input
-            id="image_emoji"
-            name="image_emoji"
-            defaultValue={event?.image_emoji ?? "🏮"}
-            maxLength={4}
-            placeholder="🏮"
-            className={FIELD_CLASS}
-          />
-        </div>
+      <div>
+        <label htmlFor="capacity" className={LABEL_CLASS}>
+          募集人数（枠）
+        </label>
+        <input
+          id="capacity"
+          name="capacity"
+          type="number"
+          min={0}
+          defaultValue={event?.capacity ?? undefined}
+          placeholder="例：15"
+          className={FIELD_CLASS}
+        />
       </div>
 
       {error && (

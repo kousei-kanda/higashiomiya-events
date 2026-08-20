@@ -32,7 +32,6 @@ export default async function EventsPage() {
                 key={event.id}
                 eventId={event.id}
                 imageSrc={getEventImageSrc(event.id)}
-                imageEmoji={event.image_emoji}
                 imageAlt={event.name}
                 title={event.name}
                 eventDateText={formatEventDate(event.event_date)}
@@ -59,7 +58,6 @@ export default async function EventsPage() {
                 key={event.id}
                 eventId={event.id}
                 imageSrc={getEventImageSrc(event.id)}
-                imageEmoji={event.image_emoji}
                 imageAlt={event.name}
                 title={event.name}
                 eventDateText={formatEventDate(event.event_date)}

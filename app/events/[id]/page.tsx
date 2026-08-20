@@ -50,7 +50,7 @@ export default async function EventDetailPage({
         </div>
       </dl>
 
-      <p className="mt-8 text-text leading-relaxed whitespace-pre-wrap">
+      <p className="mt-8 text-lg text-text leading-relaxed whitespace-pre-wrap">
         {event.description}
       </p>
 
@@ -62,7 +62,7 @@ export default async function EventDetailPage({
           <p className="text-text-dim">このイベントの募集は終了しました。</p>
         ) : (
           <>
-            <p className="text-text-dim text-sm mb-6">
+            <p className="text-text-dim text-base mb-6">
               下記フォームからご応募ください。応募内容は商工会担当者が確認し、採否を追ってメールでご連絡します。
             </p>
             <ApplicationForm eventId={event.id} />

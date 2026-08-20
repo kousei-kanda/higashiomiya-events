@@ -56,13 +56,12 @@ async function seedEventsIfEmpty(): Promise<void> {
     description: string;
     deadline: string;
     capacity: number | null;
-    image_emoji: string;
   }>;
 
   for (const e of seed) {
     await sql`
-      INSERT INTO events (id, name, event_date, venue, recruit_content, description, deadline, capacity, image_emoji)
-      VALUES (${e.id}, ${e.name}, ${e.event_date}, ${e.venue}, ${e.recruit_content}, ${e.description}, ${e.deadline}, ${e.capacity}, ${e.image_emoji})
+      INSERT INTO events (id, name, event_date, venue, recruit_content, description, deadline, capacity)
+      VALUES (${e.id}, ${e.name}, ${e.event_date}, ${e.venue}, ${e.recruit_content}, ${e.description}, ${e.deadline}, ${e.capacity})
       ON CONFLICT (id) DO NOTHING
     `;
   }
@@ -119,8 +118,7 @@ export function ensureReady(): Promise<void> {
           recruit_content TEXT NOT NULL,
           description TEXT NOT NULL,
           deadline TIMESTAMPTZ NOT NULL,
-          capacity INTEGER,
-          image_emoji TEXT NOT NULL DEFAULT '🏮'
+          capacity INTEGER
         )
       `;
       await sql`

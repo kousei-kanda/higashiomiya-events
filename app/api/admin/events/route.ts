@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
     deadline: body.deadline!,
     capacity:
       body.capacity === null || body.capacity === undefined ? null : Number(body.capacity),
-    image_emoji: body.image_emoji || "🏮",
   });
 
   return NextResponse.json({ event }, { status: 201 });

@@ -11,7 +11,6 @@ export interface EventRecord {
   description: string; // 詳細説明
   deadline: string; // 募集締切 (ISO文字列)
   capacity: number | null; // 募集人数
-  image_emoji: string; // 簡易アイコン代わり
 }
 
 // applications テーブル
@@ -65,7 +64,6 @@ export interface EventInput {
   description: string;
   deadline: string; // ISO文字列
   capacity: number | null;
-  image_emoji: string;
 }
 
 export interface ParticipationRecordInput {

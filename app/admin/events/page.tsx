@@ -35,7 +35,7 @@ export default async function AdminEventsPage() {
           href="/admin/events/new"
           className="rounded-full bg-lantern hover:bg-lantern-2 transition-colors px-5 py-2.5 text-sm font-bold text-night whitespace-nowrap"
         >
-          ＋ 新規イベント作成
+          新規イベント作成
         </Link>
       </div>
 
@@ -56,7 +56,7 @@ export default async function AdminEventsPage() {
                     {formatEventDate(event.event_date)}｜{event.venue}
                   </p>
                   <h3 className="font-display font-bold text-lg text-paper">
-                    {event.image_emoji} {event.name}
+                    {event.name}
                   </h3>
                   <p className="text-sm text-paper-dim mt-1">
                     募集内容：{event.recruit_content}

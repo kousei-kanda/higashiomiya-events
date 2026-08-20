@@ -2,7 +2,7 @@ import Link from "next/link";
 
 // 3行を超える場合に3行目で「・・・」と表示するための概算文字数トリム
 // （実際の折返し幅に応じた厳密な行数計算ではなく、デザイン上の簡易実装）
-const DESCRIPTION_MAX_CHARS = 84;
+const DESCRIPTION_MAX_CHARS = 72;
 
 function truncateDescription(text: string): string {
   if (text.length <= DESCRIPTION_MAX_CHARS) return text;
@@ -12,7 +12,6 @@ function truncateDescription(text: string): string {
 export default function EventPromoRow({
   eventId,
   imageSrc,
-  imageEmoji,
   imageAlt,
   title,
   eventDateText,
@@ -23,7 +22,6 @@ export default function EventPromoRow({
 }: {
   eventId: string;
   imageSrc?: string;
-  imageEmoji: string;
   imageAlt: string;
   title: string;
   eventDateText: string;
@@ -43,12 +41,7 @@ export default function EventPromoRow({
             className="w-full h-48 sm:h-full object-cover rounded-lg bg-line"
           />
         ) : (
-          <div
-            className="w-full h-48 sm:h-full rounded-lg bg-line flex items-center justify-center text-5xl"
-            aria-hidden
-          >
-            {imageEmoji}
-          </div>
+          <div className="w-full h-48 sm:h-full rounded-lg bg-line" aria-hidden />
         )}
       </div>
       <div className="sm:w-[70%] flex flex-col">
@@ -62,7 +55,7 @@ export default function EventPromoRow({
             締切　{deadlineText}
           </span>
         </p>
-        <p className="mt-3 text-sm text-text leading-relaxed">
+        <p className="mt-3 text-base text-text leading-relaxed">
           {truncateDescription(description)}
         </p>
         {!isClosed && (

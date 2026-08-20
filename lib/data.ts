@@ -42,7 +42,6 @@ type EventRow = {
   description: string;
   deadline: string | Date;
   capacity: number | null;
-  image_emoji: string;
 };
 
 function toIso(value: string | Date): string {
@@ -59,7 +58,6 @@ function rowToEvent(row: EventRow): EventRecord {
     description: row.description,
     deadline: toIso(row.deadline),
     capacity: row.capacity,
-    image_emoji: row.image_emoji,
   };
 }
 
@@ -86,8 +84,8 @@ export async function createEvent(input: EventInput): Promise<EventRecord> {
   await ensureReady();
   const id = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const rows = (await sql`
-    INSERT INTO events (id, name, event_date, venue, recruit_content, description, deadline, capacity, image_emoji)
-    VALUES (${id}, ${input.name}, ${input.event_date}, ${input.venue}, ${input.recruit_content}, ${input.description}, ${input.deadline}, ${input.capacity}, ${input.image_emoji})
+    INSERT INTO events (id, name, event_date, venue, recruit_content, description, deadline, capacity)
+    VALUES (${id}, ${input.name}, ${input.event_date}, ${input.venue}, ${input.recruit_content}, ${input.description}, ${input.deadline}, ${input.capacity})
     RETURNING *
   `) as EventRow[];
   return rowToEvent(rows[0]);
@@ -107,8 +105,7 @@ export async function updateEvent(
       recruit_content = ${input.recruit_content},
       description = ${input.description},
       deadline = ${input.deadline},
-      capacity = ${input.capacity},
-      image_emoji = ${input.image_emoji}
+      capacity = ${input.capacity}
     WHERE id = ${id}
     RETURNING *
   `) as EventRow[];
