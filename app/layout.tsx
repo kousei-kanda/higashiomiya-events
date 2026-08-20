@@ -38,7 +38,7 @@ export default function RootLayout({
       className={`${notoSerifJP.variable} ${zenKaku.variable} ${dotGothic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
-        <header className="bg-surface border-b border-line">
+        <header className="sticky top-0 z-50 bg-surface border-b border-line">
           <div className="mx-auto max-w-5xl px-5 sm:px-8 py-5 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               <span className="font-display font-bold text-lg tracking-wide text-text">
@@ -79,7 +79,9 @@ export default function RootLayout({
             <Link href="/privacy-policy" className="hover:text-green transition-colors">
               プライバシーポリシー
             </Link>
-            <span>商工会の方はこちら</span>
+            <Link href="/admin" className="hover:text-green transition-colors">
+              商工会の方はこちら
+            </Link>
           </div>
         </footer>
       </body>
