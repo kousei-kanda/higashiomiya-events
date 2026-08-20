@@ -3,8 +3,8 @@
 import { useState, type FormEvent } from "react";
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-line bg-night px-4 py-2.5 text-paper placeholder:text-paper-dim/60 focus:border-lantern outline-none transition-colors";
-const LABEL_CLASS = "block text-sm font-bold text-paper mb-1.5";
+  "w-full rounded-lg border border-line bg-surface px-4 py-2.5 text-text placeholder:text-text-dim/60 focus:border-green outline-none transition-colors";
+const LABEL_CLASS = "block text-sm font-bold text-text mb-1.5";
 
 export default function ApplicationForm({ eventId }: { eventId: string }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">(
@@ -54,14 +54,11 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
 
   if (status === "done") {
     return (
-      <div className="rounded-2xl border border-lantern bg-night-2 p-8 text-center">
-        <p className="text-3xl mb-3" aria-hidden>
-          🏮
-        </p>
-        <h3 className="font-display font-bold text-xl text-paper mb-2">
+      <div className="rounded-2xl border border-green bg-surface p-8 text-center">
+        <h3 className="font-display font-bold text-xl text-text mb-2">
           応募を受け付けました
         </h3>
-        <p className="text-paper-dim text-sm leading-relaxed">
+        <p className="text-text-dim text-sm leading-relaxed">
           ご入力いただいたメールアドレスに確認メールを送信しました。
           商工会担当者が内容を確認のうえ、採否についてあらためてご連絡します。
         </p>
@@ -74,7 +71,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label htmlFor="group_name" className={LABEL_CLASS}>
-            団体名 <span className="text-lantern">*</span>
+            団体名 <span className="text-green">*</span>
           </label>
           <input
             id="group_name"
@@ -86,7 +83,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
         </div>
         <div>
           <label htmlFor="representative_name" className={LABEL_CLASS}>
-            代表者名 <span className="text-lantern">*</span>
+            代表者名 <span className="text-green">*</span>
           </label>
           <input
             id="representative_name"
@@ -98,7 +95,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
         </div>
         <div>
           <label htmlFor="email" className={LABEL_CLASS}>
-            メールアドレス <span className="text-lantern">*</span>
+            メールアドレス <span className="text-green">*</span>
           </label>
           <input
             id="email"
@@ -111,7 +108,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
         </div>
         <div>
           <label htmlFor="phone" className={LABEL_CLASS}>
-            電話番号 <span className="text-lantern">*</span>
+            電話番号 <span className="text-green">*</span>
           </label>
           <input
             id="phone"
@@ -126,7 +123,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
 
       <div>
         <label htmlFor="content" className={LABEL_CLASS}>
-          出演・展示内容 <span className="text-lantern">*</span>
+          出演・展示内容 <span className="text-green">*</span>
         </label>
         <textarea
           id="content"
@@ -140,7 +137,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
 
       <div>
         <label htmlFor="group_intro" className={LABEL_CLASS}>
-          団体紹介 <span className="text-lantern">*</span>
+          団体紹介 <span className="text-green">*</span>
         </label>
         <textarea
           id="group_intro"
@@ -154,19 +151,13 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
 
       <div>
         <label htmlFor="pr_comment" className={LABEL_CLASS}>
-          PRコメント
+          備考
         </label>
-        <textarea
-          id="pr_comment"
-          name="pr_comment"
-          rows={2}
-          placeholder="意気込みやアピールポイントがあればご記入ください"
-          className={FIELD_CLASS}
-        />
+        <textarea id="pr_comment" name="pr_comment" rows={2} className={FIELD_CLASS} />
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-lantern-2" role="alert">
+        <p className="text-sm text-red-700" role="alert">
           {errorMessage}
         </p>
       )}
@@ -174,7 +165,7 @@ export default function ApplicationForm({ eventId }: { eventId: string }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="self-start rounded-full bg-lantern hover:bg-lantern-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-8 py-3 font-bold text-night"
+        className="self-start rounded-full bg-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-8 py-3 font-bold text-white"
       >
         {status === "submitting" ? "送信中…" : "この内容で応募する"}
       </button>

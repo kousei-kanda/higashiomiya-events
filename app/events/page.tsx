@@ -30,12 +30,15 @@ export default async function EventsPage() {
             {recruiting.map((event) => (
               <EventPromoRow
                 key={event.id}
+                eventId={event.id}
                 imageSrc={getEventImageSrc(event.id)}
                 imageEmoji={event.image_emoji}
                 imageAlt={event.name}
                 title={event.name}
                 eventDateText={formatEventDate(event.event_date)}
+                venueText={event.venue}
                 deadlineText={formatDeadline(event.deadline)}
+                isClosed={getEventStatus(event) === "closed"}
                 description={event.description}
               />
             ))}
@@ -54,12 +57,15 @@ export default async function EventsPage() {
             {past.map((event) => (
               <EventPromoRow
                 key={event.id}
+                eventId={event.id}
                 imageSrc={getEventImageSrc(event.id)}
                 imageEmoji={event.image_emoji}
                 imageAlt={event.name}
                 title={event.name}
                 eventDateText={formatEventDate(event.event_date)}
+                venueText={event.venue}
                 deadlineText={formatDeadline(event.deadline)}
+                isClosed={getEventStatus(event) === "closed"}
                 description={event.description}
               />
             ))}

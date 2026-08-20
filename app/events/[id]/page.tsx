@@ -20,58 +20,49 @@ export default async function EventDetailPage({
 
   return (
     <div className="mx-auto max-w-3xl px-5 sm:px-8 py-12 sm:py-16">
-      <Link href="/events" className="text-sm text-paper-dim hover:text-paper">
+      <Link href="/events" className="text-sm text-text-dim hover:text-green">
         ← イベント一覧に戻る
       </Link>
 
-      <div className="mt-6 flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs text-paper-dim mb-2">
-            {formatEventDate(event.event_date)}
-          </p>
-          <h1 className="font-display font-bold text-3xl sm:text-4xl text-paper">
-            {event.name}
-          </h1>
-        </div>
-        <span className="text-4xl shrink-0" aria-hidden>
-          {event.image_emoji}
-        </span>
-      </div>
+      <h1 className="mt-6 font-display font-bold text-3xl sm:text-4xl text-text">
+        {event.name}
+      </h1>
+      <p className="mt-2 text-sm text-text-dim">{formatEventDate(event.event_date)}</p>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <StatusStamp status={status} />
-        <span className="text-sm text-paper-dim">
+        <span className="text-sm text-text-dim">
           応募締切：{formatDeadline(event.deadline)}
         </span>
         {event.capacity && (
-          <span className="text-sm text-paper-dim">募集数：{event.capacity}枠</span>
+          <span className="text-sm text-text-dim">募集数：{event.capacity}枠</span>
         )}
       </div>
 
-      <dl className="mt-8 grid sm:grid-cols-2 gap-5 rounded-2xl border border-line bg-night-2 p-6">
+      <dl className="mt-8 grid sm:grid-cols-2 gap-5 rounded-2xl border border-line bg-surface p-6">
         <div>
-          <dt className="text-xs text-paper-dim mb-1">会場</dt>
-          <dd className="text-paper">{event.venue}</dd>
+          <dt className="text-xs text-text-dim mb-1">開催場所</dt>
+          <dd className="text-text">{event.venue}</dd>
         </div>
         <div>
-          <dt className="text-xs text-paper-dim mb-1">募集内容</dt>
-          <dd className="text-paper">{event.recruit_content}</dd>
+          <dt className="text-xs text-text-dim mb-1">募集内容</dt>
+          <dd className="text-text">{event.recruit_content}</dd>
         </div>
       </dl>
 
-      <p className="mt-8 text-paper-dim leading-relaxed whitespace-pre-wrap">
+      <p className="mt-8 text-text leading-relaxed whitespace-pre-wrap">
         {event.description}
       </p>
 
       <div className="mt-14 border-t border-line pt-10">
-        <h2 className="font-display font-bold text-2xl text-paper mb-2">
+        <h2 className="font-display font-bold text-2xl text-text mb-2">
           このイベントに応募する
         </h2>
         {status === "closed" ? (
-          <p className="text-paper-dim">このイベントの募集は終了しました。</p>
+          <p className="text-text-dim">このイベントの募集は終了しました。</p>
         ) : (
           <>
-            <p className="text-paper-dim text-sm mb-6">
+            <p className="text-text-dim text-sm mb-6">
               下記フォームからご応募ください。応募内容は商工会担当者が確認し、採否を追ってメールでご連絡します。
             </p>
             <ApplicationForm eventId={event.id} />

@@ -1,4 +1,4 @@
-import { getEvents } from "@/lib/data";
+import { getEvents, getEventStatus } from "@/lib/data";
 import { formatDeadline, formatEventDate } from "@/lib/format";
 import { getEventImageSrc } from "@/lib/eventImages";
 import EventPromoRow from "@/components/EventPromoRow";
@@ -40,12 +40,15 @@ export default async function HomePage() {
           {upcoming.map((event) => (
             <EventPromoRow
               key={event.id}
+              eventId={event.id}
               imageSrc={getEventImageSrc(event.id)}
               imageEmoji={event.image_emoji}
               imageAlt={event.name}
               title={event.name}
               eventDateText={formatEventDate(event.event_date)}
+              venueText={event.venue}
               deadlineText={formatDeadline(event.deadline)}
+              isClosed={getEventStatus(event) === "closed"}
               description={event.description}
             />
           ))}

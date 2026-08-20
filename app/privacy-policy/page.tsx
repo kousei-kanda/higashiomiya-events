@@ -7,13 +7,13 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
-      <h1 className="bg-green text-white font-display font-bold text-lg sm:text-xl px-5 py-3 rounded-md">
+      <h1 className="text-center font-display font-bold text-2xl sm:text-3xl text-text">
         プライバシーポリシー
       </h1>
 
-      <div className="mt-8 flex flex-col gap-8">
+      <div className="mt-10 flex flex-col gap-8">
         <section>
-          <h2 className="font-display font-bold text-base sm:text-lg text-text mb-2">
+          <h2 className="bg-green text-white font-display font-bold text-base sm:text-lg px-5 py-3 rounded-md mb-3">
             個人情報の利用目的
           </h2>
           <p className="text-sm sm:text-base text-text leading-relaxed">
@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display font-bold text-base sm:text-lg text-text mb-2">
+          <h2 className="bg-green text-white font-display font-bold text-base sm:text-lg px-5 py-3 rounded-md mb-3">
             アクセス解析ツールについて
           </h2>
           <p className="text-sm sm:text-base text-text leading-relaxed">
@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display font-bold text-base sm:text-lg text-text mb-2">
+          <h2 className="bg-green text-white font-display font-bold text-base sm:text-lg px-5 py-3 rounded-md mb-3">
             著作権について
           </h2>
           <p className="text-sm sm:text-base text-text leading-relaxed">
@@ -41,19 +41,16 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display font-bold text-base sm:text-lg text-text mb-2">
+          <h2 className="bg-green text-white font-display font-bold text-base sm:text-lg px-5 py-3 rounded-md mb-3">
             お問い合わせ窓口
           </h2>
-          <p className="text-sm sm:text-base text-text leading-relaxed">東大宮商工会事務局</p>
           <p className="text-sm sm:text-base text-text leading-relaxed">
-            お問い合わせは、
+            お問い合わせは
             <a
-              href="https://h-omiya.com/contact"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:bv22004@shibaura-it.ac.jp"
               className="text-green underline hover:text-green-dark"
             >
-              お問い合わせフォーム
+              bv22004@shibaura-it.ac.jp
             </a>
             よりご連絡ください。
           </p>
